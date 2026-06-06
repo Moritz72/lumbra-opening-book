@@ -10,10 +10,10 @@ keywords = []
 dependencies = [
     "async-mega.py>=2.0",
     "duckdb>=1.0",
-    "maturin>=1.0",
     "python-chess>=1.0",
     "py7zr>=1.0",
     "requests>=2.0",
+    "tqdm",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -30,7 +30,17 @@ dev = [
     "mypy>=1.0",
     "ruff>=0.14",
     "types-requests>=2.0",
+    "types-tqdm>=4.0",
 ]
+
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[tool.maturin]
+python-source = "src"
+module-name = "lumbra_opening_book.shakmaty_python"
+features = ["pyo3/extension-module"]
 
 [tool.mypy]
 files = ["src", "scripts"]
@@ -47,7 +57,7 @@ line-ending = "lf"
 
 [tool.ruff.lint.isort]
 combine-as-imports = true
-known-first-party = ["lumbra_opening_book", "shakmaty_python"]
+known-first-party = ["lumbra_opening_book"]
 
 [tool.ruff.lint]
 fixable = ["ALL"]
