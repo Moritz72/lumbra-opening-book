@@ -1,0 +1,62 @@
+[project]
+name = "lumbra-opening-book"
+version = "0.1.0"
+requires-python = ">=3.14"
+description = "A python package for generating an opening book from Lumbra's Gigabase."
+readme = "README.md"
+authors = [{ name = "Moritz Eckert", email = "MoritzEckert@web.de" }]
+license = { text = "MIT" }
+keywords = []
+dependencies = [
+    "async-mega.py>=2.0",
+    "duckdb>=1.0",
+    "maturin>=1.0",
+    "python-chess>=1.0",
+    "py7zr>=1.0",
+    "requests>=2.0",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+scripts = [
+    "sqlmodel>=0.0.30",
+]
+dev = [
+    "mypy>=1.0",
+    "ruff>=0.14",
+    "types-requests>=2.0",
+]
+
+[tool.mypy]
+files = ["src", "scripts"]
+strict = true
+
+[tool.ruff]
+src = ["src", "scripts"]
+target-version = "py314"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+known-first-party = ["lumbra_opening_book", "shakmaty_python"]
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+unfixable = []
+select = ["ALL"]
+ignore = [
+    "D100",    # module docstring
+    "D104",    # package docstring
+    "D203",    # blank line before class
+    "D212",    # multi line summary first line
+    "COM812",  # trailing comma
+]

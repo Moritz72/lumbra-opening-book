@@ -1,0 +1,15 @@
+[package]
+name = "shakmaty_python"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "shakmaty_python"
+crate-type = ["cdylib"]
+path = "rust/lib.rs"
+
+[dependencies]
+csv = "1"
+shakmaty = "0.25"
+pgn-reader = "0.24"
+pyo3 = { version = "0.28.3", features = ["extension-module"] }
