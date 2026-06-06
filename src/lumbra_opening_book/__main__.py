@@ -2,9 +2,11 @@ import argparse
 import tempfile
 from pathlib import Path
 
+from tqdm import tqdm
+
 from lumbra_opening_book.database import create_database
 from lumbra_opening_book.fetch import SITE_LINKS, get_download_link, open_mega_pgn
-from shakmaty_python import parse_pgn
+from lumbra_opening_book.shakmaty_python import parse_pgn
 
 
 def parse_args() -> argparse.Namespace:
@@ -54,9 +56,7 @@ def main(
     max_plies: int | None,
 ) -> None:
     """Create the opening book."""
-    download_links = {
-        key: get_download_link(SITE_LINKS[link]) for key, link in SITE_LINKS.items()
-    }
+    download_links = {key: get_download_link(link) for key, link in SITE_LINKS.items()}
 
     if csv_directory is None:
         temporary_directory = tempfile.TemporaryDirectory()
@@ -64,12 +64,17 @@ def main(
     else:
         temporary_directory = None
 
-    for key, download_link in download_links.items():
-        with open_mega_pgn(download_link) as pgn_path:
-            csv_path = csv_directory / f"{key}.csv"
-            parse_pgn(str(pgn_path), str(csv_path), max_plies)
+    with tqdm(
+        download_links.items(), desc="Parsing PGNs", total=len(download_links)
+    ) as progress_bar:
+        for key, download_link in progress_bar:
+            with open_mega_pgn(download_link) as pgn_path:
+                csv_path = csv_directory / f"{key}.csv"
+                parse_pgn(str(pgn_path), str(csv_path), max_plies)
 
-    create_database(database_path, table_name, csv_directory, population_batch_size)
+    with tqdm(desc="Creating Database", total=1) as progress_bar:
+        create_database(database_path, table_name, csv_directory, population_batch_size)
+        progress_bar.update(1)
 
     if temporary_directory is not None:
         temporary_directory.cleanup()

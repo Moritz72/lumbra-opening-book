@@ -17,15 +17,7 @@ uv sync
 
 ## Build
 
-This is a work in progress.
-
 For fast pgn parsing, [shakmaty](https://docs.rs/shakmaty) is used.
-
-You can compile the necessary [Rust](https://rust-lang.org) code by running
-
-```commandline
-maturin develop
-```
 
 To build the database, run
 
