@@ -68,5 +68,6 @@ ignore = [
     "D104",    # package docstring
     "D203",    # blank line before class
     "D212",    # multi line summary first line
+    "S608",    # hardcoded sql expression
     "COM812",  # trailing comma
 ]

@@ -27,12 +27,6 @@ def parse_args() -> argparse.Namespace:
         help="Name of the table to populate (default: positionmove)",
     )
     parser.add_argument(
-        "--population-batch-size",
-        type=int,
-        default=500_000,
-        help="Number of rows to insert per batch (default: 500000)",
-    )
-    parser.add_argument(
         "--csv-directory",
         type=Path,
         default=None,
@@ -51,7 +45,6 @@ def main(
     *,
     database_path: Path,
     table_name: str,
-    population_batch_size: int,
     csv_directory: Path | None,
     max_plies: int | None,
 ) -> None:
@@ -73,7 +66,7 @@ def main(
                 parse_pgn(str(pgn_path), str(csv_path), max_plies)
 
     with tqdm(desc="Creating Database", total=1) as progress_bar:
-        create_database(database_path, table_name, csv_directory, population_batch_size)
+        create_database(database_path, table_name, csv_directory)
         progress_bar.update(1)
 
     if temporary_directory is not None:
@@ -85,7 +78,6 @@ if __name__ == "__main__":
     main(
         database_path=args.database_path,
         table_name=args.table_name,
-        population_batch_size=args.population_batch_size,
         csv_directory=args.csv_directory,
         max_plies=args.max_plies,
     )
